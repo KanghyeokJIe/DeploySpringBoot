@@ -1,10 +1,4 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+# .github/workflows/your-workflow.yml
 
 name: Java CI with Maven
 
@@ -33,29 +27,18 @@ jobs:
       - name: Build with Maven
         run: mvn clean install -Dmaven.test.skip=true
 
-      # --- ↓↓↓ 디버깅을 위한 추가 단계 (유지) ↓↓↓ ---
-      - name: List files in target directory
-        run: ls -l target/
-
-      - name: Check if JAR file exists and list all files if not found
-        run: |
-          if [ -f target/springboot-reactjs-backend.jar ]; then
-            echo "JAR file found at target/springboot-reactjs-backend.jar"
-          else
-            echo "Error: JAR file NOT found at target/springboot-reactjs-backend.jar"
-            echo "Listing all files in the current working directory for debugging:"
-            ls -lR .
-            exit 1 # JAR 파일을 찾지 못하면 즉시 빌드 실패
-          fi
-      # --- ↑↑↑ 디버깅을 위한 추가 단계 끝 ↑↑↑ ---
-
+      # --- 수정된 부분 ---
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          image: ${{secrets.DOCKER_USERNAME}}/$DOCKER_IMAGE
-          tags: $DOCKER_TAG
+          # 1. 'image:' -> 'name:' 으로 수정
+          # 2. '$DOCKER_IMAGE' -> '${{ env.DOCKER_IMAGE }}' 으로 수정
+          name: ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE }}
+
+          # 3. '$DOCKER_TAG' -> '${{ env.DOCKER_TAG }}' 으로 수정
+          tags: ${{ env.DOCKER_TAG }}
+
           registry: docker.io
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          directory: . # <-- 'context: .' 대신 이 줄을 사용합니다.
