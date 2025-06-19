@@ -33,7 +33,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install -Dmaven.test.skip=true
 
-      # --- ↓↓↓ 디버깅을 위한 추가 단계 시작 ↓↓↓ ---
+      # --- ↓↓↓ 디버깅을 위한 추가 단계 (유지) ↓↓↓ ---
       - name: List files in target directory
         run: ls -l target/
 
@@ -58,4 +58,4 @@ jobs:
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          context: . # 이전에 누락되었을 수 있는 중요한 부분입니다.
+          directory: . # <-- 'context: .' 대신 이 줄을 사용합니다.
