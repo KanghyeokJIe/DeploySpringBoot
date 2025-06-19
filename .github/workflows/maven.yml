@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Java CI with Docker
 
 on:
   push:
@@ -6,12 +6,8 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  DOCKER_IMAGE: springbootreactjs
-  DOCKER_TAG: 0.2
-
 jobs:
-  build:
+  build-and-push-docker-image:
     runs-on: ubuntu-latest
     steps:
       # 1. 소스 코드 가져오기
