@@ -29,9 +29,12 @@ jobs:
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          image: ${{secrets.DOCKER_USERNAME}}/$DOCKER_IMAGE
-          # [핵심 수정] $DOCKER_TAG 대신 ${{ env.DOCKER_TAG }} 사용
+          # [수정 1] $DOCKER_IMAGE -> ${{ env.DOCKER_IMAGE }} 로 변경
+          image: ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE }}
+
+          # [수정 2] $DOCKER_TAG -> ${{ env.DOCKER_TAG }} 로 변경
           tags: ${{ env.DOCKER_TAG }}
+
           registry: docker.io
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
